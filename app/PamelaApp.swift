@@ -2,7 +2,8 @@
 //  PamelaApp.swift
 //  Pamela
 //
-//  Created by weltraa on 11/11/26.
+//  Copyright © 2026 weltraa. All rights reserved.
+//  Licensed under the PolyForm Strict License 1.0.0. See LICENSE.
 //
 
 import SwiftUI
@@ -11,7 +12,7 @@ import SwiftUI
 struct PamelaApp: App {
   var body: some Scene {
     WindowGroup {
-      Text("Hello World!")
+      RootView()
     }
   }
 }
