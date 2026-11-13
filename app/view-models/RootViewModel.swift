@@ -43,4 +43,11 @@ final class RootViewModel {
   func isSelected(_ tab: RootTab) -> Bool {
     selectedTab == tab
   }
+
+  func canAdd() -> Bool {
+    switch selectedTab {
+      case .tasks: true
+      default: false
+    }
+  }
 }

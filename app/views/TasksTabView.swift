@@ -9,11 +9,21 @@
 import SwiftUI
 
 struct TasksTabView: View {
+  @State private var selectedDate = Date.now
+
   var body: some View {
-    ContentUnavailableView {
-      Label("Under construction", systemImage: "wrench.and.screwdriver")
-    } description: {
-      Text("Coming soon!")
+    VStack {
+      Text("My Tasks").font(.title).bold()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal)
+
+        WeekCalendarView(selectedDate: $selectedDate)
+
+      Spacer()
     }
   }
+}
+
+#Preview {
+  TasksTabView()
 }
