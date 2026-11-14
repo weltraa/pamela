@@ -12,7 +12,7 @@ import Observation
 @Observable
 final class WeekCalendarViewModel {
   let calendar: Calendar
-  let todayDate: Date
+  var todayDate: Date
 
   init(calendar: Calendar = .current, todayDate: Date = .now) {
     self.calendar = calendar

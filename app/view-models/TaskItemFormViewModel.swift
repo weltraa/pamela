@@ -36,8 +36,45 @@ final class TaskItemFormViewModel {
   var frequency: Frequency = .none
   var selectedWeekdays: TaskItem.Weekdays = []
 
+  init() {}
+
+  /// Starts from an existing task's frequency, to edit it.
+  init(frequency taskFrequency: TaskItem.Frequency) {
+    switch taskFrequency {
+      case .none:
+        frequency = .none
+      case .daily:
+        frequency = .daily
+      case .weekly(let days):
+        frequency = .weekly
+        selectedWeekdays = days
+    }
+  }
+
+  /// The chosen frequency as `TaskItem` stores it, or `nil` while it is
+  /// incomplete (weekly with no days picked yet).
+  var taskFrequency: TaskItem.Frequency? {
+    switch frequency {
+      case .none:   TaskItem.Frequency.none
+      case .daily:  TaskItem.Frequency.daily
+      case .weekly:
+        selectedWeekdays.isEmpty ? nil : TaskItem.Frequency.weekly(selectedWeekdays)
+    }
+  }
+
+  /// Weekday indices (0 = Sunday) in the order the user's calendar starts
+  /// the week, so they line up with the week calendar.
+  var orderedWeekdays: [Int] {
+    let firstIndex = Calendar.current.firstWeekday - 1
+    return (0..<7).map { (firstIndex + $0) % 7 }
+  }
+
   func weekdayName(forWeekdayNum weekday: Int) -> String {
     Calendar.current.veryShortWeekdaySymbols[weekday]
+  }
+
+  func weekdayFullName(forWeekdayNum weekday: Int) -> String {
+    Calendar.current.weekdaySymbols[weekday]
   }
 
   func isSelected(weekday: Int) -> Bool {

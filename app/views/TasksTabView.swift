@@ -10,12 +10,16 @@ import SwiftData
 import SwiftUI
 
 struct TasksTabView: View {
-  @Query private var tasks: [TaskItem]
+  @Query(sort: \TaskItem.createdAt) private var tasks: [TaskItem]
 
   @State private var selectedDate = Date.now
   @State private var viewModel = TaskItemsTabViewModel()
-  
+
   var body: some View {
+    let orphanTasks = viewModel.orphanTasks(from: tasks, on: selectedDate)
+    let dailyTasks = viewModel.dailyTasks(from: tasks, on: selectedDate)
+    let weeklyTasks = viewModel.weeklyTasks(from: tasks, on: selectedDate)
+
     VStack(spacing: 0) {
       Text("My Tasks").font(.title).bold()
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -30,25 +34,32 @@ struct TasksTabView: View {
           description: "Tap + to add your first task."
         )
       }
+      else if orphanTasks.isEmpty && dailyTasks.isEmpty && weeklyTasks.isEmpty {
+        NoEntriesNotice(
+          icon: "calendar",
+          title: "Nothing for this day",
+          description: "No tasks are scheduled for this day."
+        )
+      }
       else {
         List {
           TaskSection(
             title: "Orphan Tasks",
-            tasks: viewModel.orphanTasks(from: tasks),
+            tasks: orphanTasks,
             day: selectedDate,
             viewModel: viewModel
           )
-          
+
           TaskSection(
             title: "Daily",
-            tasks: viewModel.dailyTasks(from: tasks),
+            tasks: dailyTasks,
             day: selectedDate,
             viewModel: viewModel
           )
-          
+
           TaskSection(
             title: "Weekly",
-            tasks: viewModel.weeklyTasks(from: tasks, on: selectedDate),
+            tasks: weeklyTasks,
             day: selectedDate,
             viewModel: viewModel
           )
@@ -56,6 +67,17 @@ struct TasksTabView: View {
         .listStyle(.sidebar)
         .contentMargins(.top, 16, for: .scrollContent)
       }
+    }
+    .sheet(item: $viewModel.taskToEdit) { task in
+      TaskFrequencyForm(task: task)
+    }
+    .onReceive(
+      NotificationCenter.default.publisher(
+        for: UIApplication.significantTimeChangeNotification
+      )
+    ) { _ in
+      // The day changed (e.g. midnight): jump back to today.
+      selectedDate = .now
     }
   }
 }
@@ -68,13 +90,18 @@ private struct TaskSection: View {
   let day: Date
   let viewModel: TaskItemsTabViewModel
 
-  @State private var isExpanded = true
+  private var isExpanded: Binding<Bool> {
+    Binding(
+      get: { viewModel.isExpanded(title) },
+      set: { viewModel.setExpanded($0, for: title) }
+    )
+  }
 
   var body: some View {
     if !tasks.isEmpty {
-      Section(isExpanded: $isExpanded) {
+      Section(isExpanded: isExpanded) {
         ForEach(tasks) { task in
-          TaskRow(task: task, day: day)
+          TaskRow(task: task, day: day, viewModel: viewModel)
         }
       } header: {
         HStack {
@@ -94,14 +121,42 @@ private struct TaskRow: View {
 
   let task: TaskItem
   let day: Date
+  let viewModel: TaskItemsTabViewModel
+
+  @State private var isEditingTitle = false
+  @State private var draftTitle = ""
+  @FocusState private var isTitleFocused: Bool
 
   var body: some View {
     let isDone = task.isDone(on: day)
-    
-    Text(task.title)
-      .strikethrough(isDone)
-      .foregroundStyle(isDone ? Color.secondary : Color.primary)
-      .swipeActions(edge: .leading) {
+
+    Group {
+      if isEditingTitle {
+        TextField("Title", text: $draftTitle)
+          .focused($isTitleFocused)
+          .submitLabel(.done)
+          .onSubmit(commitTitle)
+          .onAppear { isTitleFocused = true }
+          .onChange(of: isTitleFocused) { _, isFocused in
+            if !isFocused { commitTitle() }
+          }
+          // The row can vanish mid-edit (e.g. picking another day).
+          .onDisappear(perform: commitTitle)
+      }
+      else {
+        Text(task.title)
+          .strikethrough(isDone)
+          .foregroundStyle(isDone ? Color.secondary : Color.primary)
+          .frame(maxWidth: .infinity, alignment: .leading)
+          .contentShape(.rect)
+          .onTapGesture(perform: startEditingTitle)
+          .accessibilityAddTraits(.isButton)
+          .accessibilityHint("Edits the title")
+          .accessibilityValue(isDone ? "Completed" : "")
+      }
+    }
+    .swipeActions(edge: .leading) {
+      if viewModel.canComplete(on: day) {
         Button {
           withAnimation { task.toggleDone(on: day) }
         } label: {
@@ -112,15 +167,42 @@ private struct TaskRow: View {
         }
         .tint(.green)
       }
-      .swipeActions(edge: .trailing) {
-        Button(role: .destructive) {
-          withAnimation {
-            modelContext.delete(task)
-          }
-        } label: {
-          Label("Delete", systemImage: "trash")
+    }
+    .swipeActions(edge: .trailing) {
+      Button(role: .destructive) {
+        isEditingTitle = false
+        withAnimation {
+          modelContext.delete(task)
         }
+      } label: {
+        Label("Delete", systemImage: "trash")
       }
+
+      Button {
+        viewModel.taskToEdit = task
+      } label: {
+        Label("Repeat", systemImage: "repeat")
+      }
+      .tint(.indigo)
+    }
+  }
+
+  private func startEditingTitle() {
+    draftTitle = task.title
+    isEditingTitle = true
+  }
+
+  /// Saves the new title; an empty title keeps the previous one.
+  private func commitTitle() {
+    guard isEditingTitle, !task.isDeleted
+    else { return }
+
+    isEditingTitle = false
+
+    let trimmed = draftTitle.trimmingCharacters(in: .whitespacesAndNewlines)
+    if !trimmed.isEmpty {
+      task.title = trimmed
+    }
   }
 }
 

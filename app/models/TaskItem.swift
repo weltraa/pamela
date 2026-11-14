@@ -33,11 +33,18 @@ final class TaskItem {
   var frequency: Frequency
   var isCompleted: Bool
   var completedDays: [Date] = []
-  
-  init(title: String, frequency: Frequency, isCompleted: Bool) {
+  var createdAt: Date = Date.now
+
+  init(
+    title: String,
+    frequency: Frequency,
+    isCompleted: Bool,
+    createdAt: Date = .now
+  ) {
     self.title = title
     self.frequency = frequency
     self.isCompleted = isCompleted
+    self.createdAt = createdAt
   }
   
   func isDone(on day: Date, calendar: Calendar = .current) -> Bool {
@@ -58,7 +65,11 @@ final class TaskItem {
           completedDays.remove(at: index)
         }
         else {
-          completedDays.append(calendar.startOfDay(for: day))
+          // Noon, not midnight: if the user later changes time zone,
+          // a midnight date can slide into the previous day; noon can't.
+          let startOfDay = calendar.startOfDay(for: day)
+          let noon = calendar.date(byAdding: .hour, value: 12, to: startOfDay)
+          completedDays.append(noon ?? startOfDay)
         }
     }
   }

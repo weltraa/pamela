@@ -26,7 +26,16 @@ struct WeekCalendarView: View {
       }
     }
     .padding(.horizontal)
+    // Day numbers must keep fitting inside the fixed-size circles.
+    .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
     .sensoryFeedback(.selection, trigger: selectedDate)
+    .onReceive(
+      NotificationCenter.default.publisher(
+        for: UIApplication.significantTimeChangeNotification
+      )
+    ) { _ in
+      viewModel.todayDate = .now
+    }
   }
 }
 
