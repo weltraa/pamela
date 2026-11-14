@@ -6,6 +6,7 @@
 //  Licensed under the PolyForm Strict License 1.0.0. See LICENSE.
 //
 
+import SwiftData
 import SwiftUI
 
 struct RootView: View {
@@ -60,4 +61,5 @@ struct RootView: View {
 
 #Preview {
   RootView()
+    .modelContainer(for: TaskItem.self, inMemory: false)
 }

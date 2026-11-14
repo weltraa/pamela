@@ -6,10 +6,13 @@
 //  Licensed under the PolyForm Strict License 1.0.0. See LICENSE.
 //
 
+import SwiftData
 import SwiftUI
 
 struct TasksForm: View {
   @Environment(\.dismiss) private var dismiss
+  @Environment(\.modelContext) private var modelContext
+
   @State private var viewModel = TaskItemFormViewModel()
 
   var body: some View {
@@ -42,7 +45,7 @@ struct TasksForm: View {
 
         ToolbarItem(placement: .confirmationAction) {
           Button("Add", role: .confirm) {
-            // modelContext.insert(viewModel.makeTask())
+            modelContext.insert(viewModel.makeTask())
             dismiss()
           }
           .disabled(!viewModel.canSave)
@@ -85,5 +88,4 @@ private struct WeekdaySelector: View {
 
 #Preview {
   TasksForm()
-    //.modelContainer(for: TaskItem.self, inMemory: true)
 }

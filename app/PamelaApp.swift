@@ -6,6 +6,7 @@
 //  Licensed under the PolyForm Strict License 1.0.0. See LICENSE.
 //
 
+import SwiftData
 import SwiftUI
 
 @main
@@ -14,5 +15,6 @@ struct PamelaApp: App {
     WindowGroup {
       RootView()
     }
+    .modelContainer(for: TaskItem.self)
   }
 }
