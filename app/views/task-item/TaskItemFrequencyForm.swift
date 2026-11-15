@@ -1,5 +1,5 @@
 //
-//  TaskFrequencyForm.swift
+//  TaskItemFrequencyForm.swift
 //  Pamela
 //
 //  Copyright © 2026 weltraa. All rights reserved.
@@ -11,7 +11,7 @@ import SwiftUI
 
 /// Small sheet to change how often an existing task repeats.
 /// Changes apply as soon as they are made, so there is nothing to save.
-struct TaskFrequencyForm: View {
+struct TaskItemFrequencyForm: View {
   @Environment(\.dismiss) private var dismiss
   @State private var viewModel: TaskItemFormViewModel
 
@@ -67,6 +67,6 @@ struct TaskFrequencyForm: View {
   let task = TaskItem(title: "Read 20 pages", frequency: .daily, isCompleted: false)
   let _ = container.mainContext.insert(task)
 
-  TaskFrequencyForm(task: task)
+  TaskItemFrequencyForm(task: task)
     .modelContainer(container)
 }

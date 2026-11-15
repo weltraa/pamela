@@ -1,5 +1,5 @@
 //
-//  models/TaskItem.swift
+//  TaskItem.swift
 //  Pamela
 //
 //  Copyright © 2026 weltraa. All rights reserved.

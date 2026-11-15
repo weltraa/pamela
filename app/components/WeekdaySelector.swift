@@ -1,5 +1,5 @@
 //
-//  components/WeekdaySelector.swift
+//  WeekdaySelector.swift
 //  Pamela
 //
 //  Copyright © 2026 weltraa. All rights reserved.
@@ -12,8 +12,6 @@ struct WeekdaySelector: View {
   let viewModel: TaskItemFormViewModel
 
   var body: some View {
-    // No extra spacing: each day already takes an equal share of the width,
-    // and 7 circles plus spacing don't fit on 375 pt wide iPhones.
     HStack(spacing: 0) {
       ForEach(viewModel.orderedWeekdays, id: \.self) { dayIndex in
         let isSelected = viewModel.isSelected(weekday: dayIndex)
@@ -38,7 +36,6 @@ struct WeekdaySelector: View {
         .accessibilityAddTraits(isSelected ? .isSelected : [])
       }
     }
-    // Letters must keep fitting inside the fixed-size circles.
     .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
   }
 }

@@ -1,5 +1,5 @@
 //
-//  BooksTabView.swift
+//  MovieTabView.swift
 //  Pamela
 //
 //  Copyright © 2026 weltraa. All rights reserved.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct BooksTabView: View {
+struct MovieTabView: View {
   var body: some View {
     ContentUnavailableView {
       Label("Under construction", systemImage: "wrench.and.screwdriver")

@@ -1,5 +1,5 @@
 //
-//  TasksTabView.swift
+//  TaskItemTabView.swift
 //  Pamela
 //
 //  Copyright © 2026 weltraa. All rights reserved.
@@ -9,11 +9,11 @@
 import SwiftData
 import SwiftUI
 
-struct TasksTabView: View {
+struct TaskItemTabView: View {
   @Query(sort: \TaskItem.createdAt) private var tasks: [TaskItem]
 
   @State private var selectedDate = Date.now
-  @State private var viewModel = TaskItemsTabViewModel()
+  @State private var viewModel = TaskItemTabViewModel()
 
   var body: some View {
     let orphanTasks = viewModel.orphanTasks(from: tasks, on: selectedDate)
@@ -43,21 +43,21 @@ struct TasksTabView: View {
       }
       else {
         List {
-          TaskSection(
+          TaskItemSection(
             title: "Orphan Tasks",
             tasks: orphanTasks,
             day: selectedDate,
             viewModel: viewModel
           )
 
-          TaskSection(
+          TaskItemSection(
             title: "Daily",
             tasks: dailyTasks,
             day: selectedDate,
             viewModel: viewModel
           )
 
-          TaskSection(
+          TaskItemSection(
             title: "Weekly",
             tasks: weeklyTasks,
             day: selectedDate,
@@ -69,7 +69,7 @@ struct TasksTabView: View {
       }
     }
     .sheet(item: $viewModel.taskToEdit) { task in
-      TaskFrequencyForm(task: task)
+      TaskItemFrequencyForm(task: task)
     }
     .onReceive(
       NotificationCenter.default.publisher(
@@ -84,11 +84,11 @@ struct TasksTabView: View {
 
 // MARK: - Subviews
 
-private struct TaskSection: View {
+private struct TaskItemSection: View {
   let title: String
   let tasks: [TaskItem]
   let day: Date
-  let viewModel: TaskItemsTabViewModel
+  let viewModel: TaskItemTabViewModel
 
   private var isExpanded: Binding<Bool> {
     Binding(
@@ -101,7 +101,7 @@ private struct TaskSection: View {
     if !tasks.isEmpty {
       Section(isExpanded: isExpanded) {
         ForEach(tasks) { task in
-          TaskRow(task: task, day: day, viewModel: viewModel)
+          TaskItemRow(task: task, day: day, viewModel: viewModel)
         }
       } header: {
         HStack {
@@ -116,12 +116,12 @@ private struct TaskSection: View {
   }
 }
 
-private struct TaskRow: View {
+private struct TaskItemRow: View {
   @Environment(\.modelContext) private var modelContext
 
   let task: TaskItem
   let day: Date
-  let viewModel: TaskItemsTabViewModel
+  let viewModel: TaskItemTabViewModel
 
   @State private var isEditingTitle = false
   @State private var draftTitle = ""
@@ -207,6 +207,6 @@ private struct TaskRow: View {
 }
 
 #Preview {
-  TasksTabView()
+  TaskItemTabView()
     .modelContainer(for: TaskItem.self, inMemory: false)
 }

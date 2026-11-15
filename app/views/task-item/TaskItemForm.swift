@@ -1,5 +1,5 @@
 //
-//  TasksForm.swift
+//  TaskItemForm.swift
 //  Pamela
 //
 //  Copyright © 2026 weltraa. All rights reserved.
@@ -9,7 +9,7 @@
 import SwiftData
 import SwiftUI
 
-struct TasksForm: View {
+struct TaskItemForm: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
 
@@ -56,6 +56,6 @@ struct TasksForm: View {
 }
 
 #Preview {
-  TasksForm()
+  TaskItemForm()
     .modelContainer(for: TaskItem.self, inMemory: true)
 }

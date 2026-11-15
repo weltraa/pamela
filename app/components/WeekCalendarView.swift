@@ -1,5 +1,5 @@
 //
-//  components/WeekCalendar.swift
+//  WeekCalendarView.swift
 //  Pamela
 //
 //  Copyright © 2026 weltraa. All rights reserved.
@@ -26,7 +26,6 @@ struct WeekCalendarView: View {
       }
     }
     .padding(.horizontal)
-    // Day numbers must keep fitting inside the fixed-size circles.
     .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
     .sensoryFeedback(.selection, trigger: selectedDate)
     .onReceive(

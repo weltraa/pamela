@@ -1,5 +1,5 @@
 //
-//  TaskItemsTabViewModel.swift
+//  TaskItemTabViewModel.swift
 //  Pamela
 //
 //  Copyright © 2026 weltraa. All rights reserved.
@@ -10,7 +10,7 @@ import Foundation
 import Observation
 
 @Observable
-final class TaskItemsTabViewModel {
+final class TaskItemTabViewModel {
   let calendar: Calendar
 
   /// Task whose frequency is being edited; drives the edit sheet.
@@ -67,7 +67,6 @@ final class TaskItemsTabViewModel {
     }
   }
 
-  /// A task only shows up from the day it was created onwards.
   private func exists(_ task: TaskItem, on day: Date) -> Bool {
     calendar.startOfDay(for: task.createdAt) <= calendar.startOfDay(for: day)
   }

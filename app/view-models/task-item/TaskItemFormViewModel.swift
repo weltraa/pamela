@@ -41,10 +41,8 @@ final class TaskItemFormViewModel {
   /// Starts from an existing task's frequency, to edit it.
   init(frequency taskFrequency: TaskItem.Frequency) {
     switch taskFrequency {
-      case .none:
-        frequency = .none
-      case .daily:
-        frequency = .daily
+      case .none: frequency = .none
+      case .daily: frequency = .daily
       case .weekly(let days):
         frequency = .weekly
         selectedWeekdays = days
@@ -58,7 +56,9 @@ final class TaskItemFormViewModel {
       case .none:   TaskItem.Frequency.none
       case .daily:  TaskItem.Frequency.daily
       case .weekly:
-        selectedWeekdays.isEmpty ? nil : TaskItem.Frequency.weekly(selectedWeekdays)
+        selectedWeekdays.isEmpty
+          ? nil
+          : TaskItem.Frequency.weekly(selectedWeekdays)
     }
   }
 

@@ -1,5 +1,5 @@
 //
-//  MoviesForm.swift
+//  BookForm.swift
 //  Pamela
 //
 //  Copyright © 2026 weltraa. All rights reserved.
@@ -8,9 +8,9 @@
 
 import SwiftUI
 
-struct MoviesForm: View {
+struct BookForm: View {
 
   var body: some View {
-    Text("Movies form")
+    Text("Books form")
   }
 }

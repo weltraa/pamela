@@ -19,9 +19,9 @@ struct RootView: View {
         ForEach(RootViewModel.RootTab.allCases) { tab in
           Tab(value: tab) {
             switch tab {
-              case .tasks:    TasksTabView()
-              case .books:    BooksTabView()
-              case .movies:   MoviesTabView()
+              case .tasks:    TaskItemTabView()
+              case .books:    BookTabView()
+              case .movies:   MovieTabView()
               case .sobriety: SobrietyTabView()
             }
           } label: {
@@ -51,7 +51,7 @@ struct RootView: View {
       }
       .sheet(isPresented: $showAddSheet) {
         switch viewModel.selectedTab {
-          case .tasks: TasksForm()
+          case .tasks: TaskItemForm()
           default: EmptyView()
         }
       }

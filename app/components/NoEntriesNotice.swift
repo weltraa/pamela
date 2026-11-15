@@ -1,5 +1,5 @@
 //
-//  components/NoEntriesNotice.swift
+//  NoEntriesNotice.swift
 //  Pamela
 //
 //  Copyright © 2026 weltraa. All rights reserved.
