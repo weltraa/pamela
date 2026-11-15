@@ -10,6 +10,7 @@ import SwiftData
 import SwiftUI
 
 struct MovieTabView: View {
+  @Environment(\.modelContext) private var modelContext
   @Query(sort: \Movie.createdAt, order: .reverse) private var movies: [Movie]
 
   var body: some View {
@@ -33,6 +34,14 @@ struct MovieTabView: View {
             Text("Dir. \(movie.directorsCredit)")
               .font(.footnote)
               .foregroundStyle(.secondary)
+          }
+          .swipeActions(edge: .trailing) {
+            Button(role: .destructive) {
+              withAnimation { modelContext.delete(movie) }
+              try? modelContext.save()
+            } label: {
+              Label("Delete", systemImage: "trash")
+            }
           }
         }
       }

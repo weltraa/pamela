@@ -24,6 +24,3 @@ DerivedData/
 # Editors
 .vscode/
 .idea/
-
-# Local archive (not tracked)
-archive/
