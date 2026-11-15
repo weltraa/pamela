@@ -39,11 +39,27 @@ final class MovieFormViewModel {
     Self.minSelectableYear...Self.currYear
   }
 
-  // The filled-in director names, in order (empty fields skipped).
+  // The filled-in director names, in order. Empty fields are skipped, and
+  // the same name typed twice (even with different case or accents) counts once.
   var directors: [String] {
-    [firstDirector, secondDirector]
+    var seenKeys = Set<String>()
+
+    return [firstDirector, secondDirector]
       .map(StringUtils.trimmedTitle(for:))
-      .filter { !$0.isEmpty }
+      .filter { !$0.isEmpty && seenKeys.insert(StringUtils.matchKey(for: $0)).inserted }
+  }
+
+  // Whether `movies` already has a movie with this title and year.
+  // The movie being edited doesn't count as a duplicate of itself.
+  // Same title with a different year is allowed (remakes).
+  func isDuplicate(among movies: [Movie], excluding editedMovie: Movie? = nil) -> Bool {
+    let nameKey = StringUtils.matchKey(for: name)
+
+    return movies.contains { movie in
+      movie != editedMovie
+        && movie.year == year
+        && StringUtils.matchKey(for: movie.name) == nameKey
+    }
   }
 
   // "et al." is only available once both directors are filled in.

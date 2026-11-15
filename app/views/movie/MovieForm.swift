@@ -12,6 +12,7 @@ import SwiftData
 struct MovieForm: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
+  @Query private var movies: [Movie]
 
   @State private var viewModel: MovieFormViewModel
 
@@ -26,11 +27,20 @@ struct MovieForm: View {
   }
 
   var body: some View {
+    let isDuplicate = viewModel.isDuplicate(among: movies, excluding: movie)
+
     NavigationStack {
       Form {
-        Section("Title"){
+        Section {
           TextField("Type here...", text: $viewModel.name)
             .autocorrectionDisabled()
+        } header: {
+          Text("Title")
+        } footer: {
+          if isDuplicate {
+            Text("This movie is already in your list.")
+              .foregroundStyle(.red)
+          }
         }
 
         Section("Year"){
@@ -84,7 +94,7 @@ struct MovieForm: View {
             try? modelContext.save()
             dismiss()
           }
-          .disabled(!viewModel.canSave)
+          .disabled(!viewModel.canSave || isDuplicate)
         }
       }
     }

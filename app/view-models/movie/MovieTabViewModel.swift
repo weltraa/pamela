@@ -36,7 +36,7 @@ final class MovieTabViewModel {
 
     return movies
       .flatMap(\.directors)
-      .filter { seenKeys.insert(Self.matchKey(for: $0)).inserted }
+      .filter { seenKeys.insert(StringUtils.matchKey(for: $0)).inserted }
       .sorted { $0.localizedStandardCompare($1) == .orderedAscending }
   }
 
@@ -45,7 +45,7 @@ final class MovieTabViewModel {
       let matchesYear = selectedYear.map { movie.year == $0 } ?? true
       let matchesDirector = selectedDirector.map { director in
         movie.directors.contains {
-          Self.matchKey(for: $0) == Self.matchKey(for: director)
+          StringUtils.matchKey(for: $0) == StringUtils.matchKey(for: director)
         }
       } ?? true
 
@@ -63,11 +63,4 @@ final class MovieTabViewModel {
     if let selectedDirector, !directors(in: movies).contains(selectedDirector) {
       self.selectedDirector = nil
     }
-  }
-
-  private static func matchKey(for name: String) -> String {
-    name.folding(
-      options: [.caseInsensitive, .diacriticInsensitive], locale: .current
-    )
-  }
-}
+  }}

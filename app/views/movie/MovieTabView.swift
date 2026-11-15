@@ -11,7 +11,9 @@ import SwiftUI
 
 struct MovieTabView: View {
   @Environment(\.modelContext) private var modelContext
-  @Query(sort: \Movie.name, order: .forward) private var movies: [Movie]
+  // By title, then by year so remakes ("Dune" 1984, 2021) keep a fixed order.
+  @Query(sort: [SortDescriptor(\Movie.name), SortDescriptor(\Movie.year)])
+  private var movies: [Movie]
 
   @State private var movieToEdit: Movie?
   @State private var viewModel = MovieTabViewModel()
@@ -63,6 +65,8 @@ struct MovieTabView: View {
             }
             .labelStyle(.iconOnly)
             .buttonStyle(.borderless)
+            // VoiceOver says which movie, not just "Edit".
+            .accessibilityLabel("Edit \(movie.name)")
           }
           .swipeActions(edge: .trailing) {
             Button(role: .destructive) {
