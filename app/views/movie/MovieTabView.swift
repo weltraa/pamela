@@ -14,14 +14,24 @@ struct MovieTabView: View {
   @Query(sort: \Movie.name, order: .forward) private var movies: [Movie]
 
   @State private var movieToEdit: Movie?
+  @State private var viewModel = MovieTabViewModel()
 
   var body: some View {
+    let filteredMovies = viewModel.filtered(movies)
+
     VStack(spacing: 0) {
-      Text("My Movie List").font(.title).bold()
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal)
-        .padding(.bottom)
-      
+      HStack {
+        Text("My Movie List").font(.title).bold()
+
+        Spacer()
+
+        if !movies.isEmpty {
+          MovieFilterMenu(viewModel: viewModel, movies: movies)
+        }
+      }
+      .padding(.horizontal)
+      .padding(.bottom)
+
       if movies.isEmpty {
         NoEntriesNotice(
           icon: "list.and.film",
@@ -29,8 +39,15 @@ struct MovieTabView: View {
           description: "Tap + to add your first favorite movie"
         )
       }
+      else if filteredMovies.isEmpty {
+        NoEntriesNotice(
+          icon: "line.3.horizontal.decrease.circle",
+          title: "No matching movies",
+          description: "Try another year or director, or clear the filters."
+        )
+      }
       else {
-        List(movies) { movie in
+        List(filteredMovies) { movie in
           HStack {
             VStack(alignment: .leading) {
               Text("\(movie.name) (\(String(movie.year)))").bold()
@@ -60,6 +77,58 @@ struct MovieTabView: View {
     }
     .sheet(item: $movieToEdit) { movie in
       MovieForm(movie: movie)
+    }
+    .onChange(of: viewModel.years(in: movies)) {
+      viewModel.dropStaleFilters(for: movies)
+    }
+    .onChange(of: viewModel.directors(in: movies)) {
+      viewModel.dropStaleFilters(for: movies)
+    }
+  }
+}
+
+// MARK: - Subviews
+
+private struct MovieFilterMenu: View {
+  @Bindable var viewModel: MovieTabViewModel
+  let movies: [Movie]
+
+  var body: some View {
+    Menu {
+      Picker("Year", selection: $viewModel.selectedYear) {
+        Text("Any Year").tag(UInt16?.none)
+
+        ForEach(viewModel.years(in: movies), id: \.self) { year in
+          Text(String(year)).tag(Optional(year))
+        }
+      }
+      .pickerStyle(.menu)
+
+      Picker("Director", selection: $viewModel.selectedDirector) {
+        Text("Any Director").tag(String?.none)
+
+        ForEach(viewModel.directors(in: movies), id: \.self) { director in
+          Text(director).tag(Optional(director))
+        }
+      }
+      .pickerStyle(.menu)
+
+      if viewModel.isFiltering {
+        Divider()
+
+        Button("Clear Filters", systemImage: "xmark.circle") {
+          viewModel.clearFilters()
+        }
+      }
+    } label: {
+      Label(
+        "Filter",
+        systemImage: viewModel.isFiltering
+          ? "line.3.horizontal.decrease.circle.fill"
+          : "line.3.horizontal.decrease.circle"
+      )
+      .labelStyle(.iconOnly)
+      .font(.title2)
     }
   }
 }
