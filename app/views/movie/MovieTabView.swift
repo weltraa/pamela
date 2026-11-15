@@ -11,7 +11,9 @@ import SwiftUI
 
 struct MovieTabView: View {
   @Environment(\.modelContext) private var modelContext
-  @Query(sort: \Movie.createdAt, order: .reverse) private var movies: [Movie]
+  @Query(sort: \Movie.name, order: .forward) private var movies: [Movie]
+
+  @State private var movieToEdit: Movie?
 
   var body: some View {
     VStack(spacing: 0) {
@@ -29,11 +31,21 @@ struct MovieTabView: View {
       }
       else {
         List(movies) { movie in
-          VStack(alignment: .leading) {
-            Text("\(movie.name) (\(String(movie.year)))").bold()
-            Text("Dir. \(movie.directorsCredit)")
-              .font(.footnote)
-              .foregroundStyle(.secondary)
+          HStack {
+            VStack(alignment: .leading) {
+              Text("\(movie.name) (\(String(movie.year)))").bold()
+              Text("Dir. \(movie.directorsCredit)")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+            }
+
+            Spacer()
+
+            Button("Edit", systemImage: "pencil") {
+              movieToEdit = movie
+            }
+            .labelStyle(.iconOnly)
+            .buttonStyle(.borderless)
           }
           .swipeActions(edge: .trailing) {
             Button(role: .destructive) {
@@ -45,6 +57,9 @@ struct MovieTabView: View {
           }
         }
       }
+    }
+    .sheet(item: $movieToEdit) { movie in
+      MovieForm(movie: movie)
     }
   }
 }

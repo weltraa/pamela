@@ -17,20 +17,17 @@ final class Movie {
   var year: UInt16
   var directors: [String]
   var hasMoreDirectors: Bool
-  var createdAt: Date
-  
+
   init(
     name: String,
     year: UInt16,
     directors: [String],
-    hasMoreDirectors: Bool = false,
-    createdAt: Date = .now
+    hasMoreDirectors: Bool = false
   ){
     self.name = name
     self.year = year
     self.directors = Array(directors.prefix(Self.maxDirectors))
     self.hasMoreDirectors = hasMoreDirectors
-    self.createdAt = createdAt
   }
   
   static func credit(

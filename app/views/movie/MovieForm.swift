@@ -13,7 +13,17 @@ struct MovieForm: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
 
-  @State private var viewModel = MovieFormViewModel()
+  @State private var viewModel: MovieFormViewModel
+
+  // The movie being edited, or `nil` when adding a new one.
+  private let movie: Movie?
+
+  init(movie: Movie? = nil) {
+    self.movie = movie
+    _viewModel = State(
+      initialValue: movie.map { MovieFormViewModel(movie: $0) } ?? MovieFormViewModel()
+    )
+  }
 
   var body: some View {
     NavigationStack {
@@ -55,7 +65,7 @@ struct MovieForm: View {
           }
         }
       }
-      .navigationTitle("New Movie Entry")
+      .navigationTitle(movie == nil ? "New Movie Entry" : "Edit Movie")
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
         ToolbarItem(placement: .cancellationAction) {
@@ -65,8 +75,12 @@ struct MovieForm: View {
         }
         
         ToolbarItem(placement: .confirmationAction) {
-          Button("Add", role: .confirm) {
-            modelContext.insert(viewModel.makeMovie())
+          Button(movie == nil ? "Add" : "Save", role: .confirm) {
+            if let movie {
+              viewModel.apply(to: movie)
+            } else {
+              modelContext.insert(viewModel.makeMovie())
+            }
             try? modelContext.save()
             dismiss()
           }

@@ -24,6 +24,17 @@ final class MovieFormViewModel {
   // and the rest show up as "et al."
   var hasMoreDirectors: Bool = false
 
+  init() {}
+
+  // Starts from an existing movie, to edit it.
+  init(movie: Movie) {
+    name = movie.name
+    year = movie.year
+    firstDirector = movie.directors.first ?? ""
+    secondDirector = movie.directors.dropFirst().first ?? ""
+    hasMoreDirectors = movie.hasMoreDirectors
+  }
+
   var selectableYears: ClosedRange<UInt16> {
     Self.minSelectableYear...Self.currYear
   }
@@ -59,5 +70,13 @@ final class MovieFormViewModel {
       directors: directors,
       hasMoreDirectors: hasMoreDirectors && canMarkMoreDirectors
     )
+  }
+
+  // Copies the form's values onto an existing movie.
+  func apply(to movie: Movie) {
+    movie.name = StringUtils.trimmedTitle(for: name)
+    movie.year = year
+    movie.directors = directors
+    movie.hasMoreDirectors = hasMoreDirectors && canMarkMoreDirectors
   }
 }
