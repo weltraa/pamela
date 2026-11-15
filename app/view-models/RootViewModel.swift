@@ -46,7 +46,7 @@ final class RootViewModel {
 
   func canAdd() -> Bool {
     switch selectedTab {
-      case .tasks: true
+      case .tasks, .movies: true
       default: false
     }
   }

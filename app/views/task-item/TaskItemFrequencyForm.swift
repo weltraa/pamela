@@ -10,9 +10,10 @@ import SwiftData
 import SwiftUI
 
 /// Small sheet to change how often an existing task repeats.
-/// Changes apply as soon as they are made, so there is nothing to save.
+/// Changes apply as soon as they are made, so there is no Save button.
 struct TaskItemFrequencyForm: View {
   @Environment(\.dismiss) private var dismiss
+  @Environment(\.modelContext) private var modelContext
   @State private var viewModel: TaskItemFormViewModel
 
   let task: TaskItem
@@ -54,6 +55,7 @@ struct TaskItemFrequencyForm: View {
     .onChange(of: viewModel.taskFrequency) { _, newFrequency in
       if let newFrequency {
         task.frequency = newFrequency
+        try? modelContext.save()
       }
     }
   }

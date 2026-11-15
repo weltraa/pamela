@@ -46,6 +46,7 @@ struct TaskItemForm: View {
         ToolbarItem(placement: .confirmationAction) {
           Button("Add", role: .confirm) {
             modelContext.insert(viewModel.makeTask())
+            try? modelContext.save()
             dismiss()
           }
           .disabled(!viewModel.canSave)

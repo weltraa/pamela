@@ -159,6 +159,7 @@ private struct TaskItemRow: View {
       if viewModel.canComplete(on: day) {
         Button {
           withAnimation { task.toggleDone(on: day) }
+          try? modelContext.save()
         } label: {
           Label(
             isDone ? "Undo" : "Done",
@@ -174,6 +175,7 @@ private struct TaskItemRow: View {
         withAnimation {
           modelContext.delete(task)
         }
+        try? modelContext.save()
       } label: {
         Label("Delete", systemImage: "trash")
       }
@@ -202,11 +204,12 @@ private struct TaskItemRow: View {
     let trimmed = draftTitle.trimmingCharacters(in: .whitespacesAndNewlines)
     if !trimmed.isEmpty {
       task.title = trimmed
+      try? modelContext.save()
     }
   }
 }
 
 #Preview {
   TaskItemTabView()
-    .modelContainer(for: TaskItem.self, inMemory: false)
+    .modelContainer(for: TaskItem.self, inMemory: true)
 }

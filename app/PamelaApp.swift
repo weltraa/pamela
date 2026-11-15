@@ -15,6 +15,6 @@ struct PamelaApp: App {
     WindowGroup {
       RootView()
     }
-    .modelContainer(for: TaskItem.self)
+    .modelContainer(for: [TaskItem.self, Movie.self])
   }
 }

@@ -52,6 +52,7 @@ struct RootView: View {
       .sheet(isPresented: $showAddSheet) {
         switch viewModel.selectedTab {
           case .tasks: TaskItemForm()
+          case .movies: MovieForm()
           default: EmptyView()
         }
       }
@@ -61,5 +62,8 @@ struct RootView: View {
 
 #Preview {
   RootView()
-    .modelContainer(for: TaskItem.self, inMemory: false)
+    .modelContainer(
+      for: [TaskItem.self, Movie.self],
+      inMemory: true
+    )
 }
