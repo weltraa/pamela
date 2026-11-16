@@ -1,16 +1,15 @@
 //
-//  BookForm.swift
+//  SobrietyFormView.swift
 //  Pamela
 //
 //  Copyright © 2026 weltraa. All rights reserved.
 //  Licensed under the PolyForm Strict License 1.0.0. See LICENSE.
 //
-
 import SwiftUI
 
-struct BookForm: View {
+struct SobrietyFormView: View {
 
   var body: some View {
-    Text("Books form")
+    Text("Sobriety form")
   }
 }

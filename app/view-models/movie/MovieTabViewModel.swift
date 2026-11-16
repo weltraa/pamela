@@ -63,4 +63,5 @@ final class MovieTabViewModel {
     if let selectedDirector, !directors(in: movies).contains(selectedDirector) {
       self.selectedDirector = nil
     }
-  }}
+  }
+}

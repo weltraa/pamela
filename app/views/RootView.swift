@@ -34,7 +34,7 @@ struct RootView: View {
         }
       }
       .toolbar {
-        ToolbarItem(placement: .topBarLeading){
+        ToolbarItem(placement: .topBarLeading) {
           NavigationLink {
             SettingsView()
           } label: {
@@ -42,8 +42,8 @@ struct RootView: View {
           }
         }
 
-        ToolbarItem(placement: .topBarTrailing){
-          Button("Add", systemImage: "plus.circle"){
+        ToolbarItem(placement: .topBarTrailing) {
+          Button("Add", systemImage: "plus.circle") {
             showAddSheet = true
           }
           .disabled(!viewModel.canAdd())
@@ -51,8 +51,8 @@ struct RootView: View {
       }
       .sheet(isPresented: $showAddSheet) {
         switch viewModel.selectedTab {
-          case .tasks: TaskItemForm()
-          case .movies: MovieForm()
+          case .tasks: TaskItemFormView()
+          case .movies: MovieFormView()
           default: EmptyView()
         }
       }

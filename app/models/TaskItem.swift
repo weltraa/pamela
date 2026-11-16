@@ -1,5 +1,5 @@
 //
-//  TaskItem.swift
+//  models/TaskItem.swift
 //  Pamela
 //
 //  Copyright © 2026 weltraa. All rights reserved.
@@ -12,8 +12,6 @@ import SwiftData
 @Model
 final class TaskItem {
   struct Weekdays: OptionSet, Codable {
-    let rawValue: UInt8
-
     static let sunday    = Weekdays(rawValue: 1 << 0)
     static let monday    = Weekdays(rawValue: 1 << 1)
     static let tuesday   = Weekdays(rawValue: 1 << 2)
@@ -21,6 +19,8 @@ final class TaskItem {
     static let thursday  = Weekdays(rawValue: 1 << 4)
     static let friday    = Weekdays(rawValue: 1 << 5)
     static let saturday  = Weekdays(rawValue: 1 << 6)
+
+    let rawValue: UInt8
   }
 
   enum Frequency: Codable, Equatable {
@@ -46,7 +46,7 @@ final class TaskItem {
     self.isCompleted = isCompleted
     self.createdAt = createdAt
   }
-  
+
   func isDone(on day: Date, calendar: Calendar = .current) -> Bool {
     switch frequency {
       case .none: isCompleted

@@ -1,5 +1,5 @@
 //
-//  TaskItemForm.swift
+//  TaskItemFormView.swift
 //  Pamela
 //
 //  Copyright © 2026 weltraa. All rights reserved.
@@ -9,7 +9,7 @@
 import SwiftData
 import SwiftUI
 
-struct TaskItemForm: View {
+struct TaskItemFormView: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
 
@@ -23,8 +23,8 @@ struct TaskItemForm: View {
         }
 
         Section("Frequency") {
-          Picker("Repeat", selection: $viewModel.frequency){
-            ForEach(TaskItemFormViewModel.Frequency.allCases){ option in
+          Picker("Repeat", selection: $viewModel.frequency) {
+            ForEach(TaskItemFormViewModel.Frequency.allCases) { option in
               Text(option.str).tag(option)
             }
           }
@@ -57,6 +57,6 @@ struct TaskItemForm: View {
 }
 
 #Preview {
-  TaskItemForm()
+  TaskItemFormView()
     .modelContainer(for: TaskItem.self, inMemory: true)
 }

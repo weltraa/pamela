@@ -80,7 +80,7 @@ struct MovieTabView: View {
       }
     }
     .sheet(item: $movieToEdit) { movie in
-      MovieForm(movie: movie)
+      MovieFormView(movie: movie)
     }
     .onChange(of: viewModel.years(in: movies)) {
       viewModel.dropStaleFilters(for: movies)

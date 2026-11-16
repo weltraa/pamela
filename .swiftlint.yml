@@ -1,0 +1,202 @@
+# SwiftLint configuration for Pamela.
+
+# Lint only the app's source code.
+included:
+  - app
+
+# Whitelist: only the rules listed here run.
+only_rules:
+  # Indentation: two spaces per level, never tabs (see `no_tabs` below).
+  - indentation_width
+  - leading_whitespace
+
+  # Line length and whitespace at line/file ends.
+  - line_length
+  - trailing_whitespace
+  - trailing_newline
+  - vertical_whitespace
+
+  # One statement per line (see `one_statement_per_line` below).
+  - trailing_semicolon
+
+  # Spaces around operators and after commas and colons.
+  - operator_usage_whitespace
+  - return_arrow_whitespace
+  - comma
+  - colon
+
+  # Braces: space before `{`, `} else` style, `case` indented in `switch`.
+  - opening_brace
+  - statement_position
+  - switch_case_alignment
+
+  # Collections: no trailing comma after the last element.
+  - trailing_comma
+
+  # Comments: `// text`, `// MARK: - Section`, and the project file header.
+  - comment_spacing
+  - mark
+  - file_header
+
+  # Naming: the file is named after its type.
+  - file_name
+
+  # Rails-like order of declarations inside types.
+  - type_contents_order
+
+  # Rules defined under `custom_rules` below.
+  - custom_rules
+
+indentation_width:
+  indentation_width: 2
+
+line_length:
+  warning: 80
+  ignores_urls: true
+
+trailing_whitespace:
+  # Blank lines with leftover spaces count too.
+  ignores_empty_lines: false
+
+statement_position:
+  # `else` / `catch` go on the line after the closing brace:
+  #   }
+  #   else {
+  statement_mode: uncuddled_else
+
+switch_case_alignment:
+  # `case` is indented one level inside `switch`.
+  indented_cases: true
+
+colon:
+  # Allows aligning values after colons:
+  #   case .none:   .none
+  #   case .daily:  .daily
+  flexible_right_spacing: true
+
+operator_usage_whitespace:
+  # Ranges are the exception: `0..<7`, `minYear...currYear`.
+  allowed_no_space_operators: ["...", "..<"]
+
+# Naming conventions (convention over configuration, Rails-style):
+#   - Layer folders are plural, like Rails' app/models and app/views:
+#     components, models, utils, views, view-models.
+#   - Resource folders and type names are singular: movie/, task-item/,
+#     Movie, TaskItem.
+#   - Each file is named after its type (`file_name` rule).
+#   - The suffix says what a type is:
+#       views/        ...View       MovieTabView, MovieFormView
+#       view-models/  ...ViewModel  MovieFormViewModel (model of MovieFormView)
+#       utils/        ...Utils      StringUtils
+#       models/       no suffix     Movie, TaskItem
+#       components/   no suffix     WeekCalendar, NoEntriesNotice
+#   - The header names the folder only when the type has no suffix:
+#     `models/Movie.swift`, `components/WeekCalendar.swift`. Everything
+#     else is just `FileName.swift`. `file_header` accepts either form;
+#     the `*_header_folder` custom rules below decide which one each
+#     folder needs.
+file_header:
+  required_pattern: |
+                    //
+                    //  (?:components/|models/)?SWIFTLINT_CURRENT_FILENAME
+                    //  Pamela
+                    //
+                    //  Copyright © \d{4} weltraa\. All rights reserved\.
+                    //  Licensed under the PolyForm Strict License 1\.0\.0\. See LICENSE\.
+                    //
+
+type_contents_order:
+  order:
+    - [case, type_alias, associated_type]
+    - type_property
+    - subtype
+    - [ib_inspectable, ib_outlet, instance_property]
+    - initializer
+    - [view_life_cycle_method, deinitializer]
+    - type_method
+    - [ib_action, ib_segue_action, other_method]
+    - subscript
+
+custom_rules:
+  no_tabs:
+    name: "No Tabs"
+    regex: '^[ \t]*\t'
+    message: "Indent with two spaces, not tabs."
+    severity: warning
+
+  one_statement_per_line:
+    name: "One Statement per Line"
+    regex: ';[ \t]*[^\s]'
+    excluded_match_kinds: [comment, doccomment, string]
+    message: "Put each statement on its own line."
+    severity: warning
+
+  no_space_after_opening_paren_or_bracket:
+    name: "No Space After ( or ["
+    regex: '[\(\[][ \t]+[^\s]'
+    excluded_match_kinds: [comment, doccomment, string]
+    message: "No space after `(` or `[`."
+    severity: warning
+
+  no_space_before_closing_paren_or_bracket:
+    name: "No Space Before ) or ]"
+    regex: '[^\s][ \t]+[\)\]]'
+    excluded_match_kinds: [comment, doccomment, string]
+    message: "No space before `)` or `]`."
+    severity: warning
+
+  space_inside_braces:
+    name: "Space Inside Braces"
+    regex: '\{[^\s}]|[^\s{]\}'
+    excluded_match_kinds: [comment, doccomment, string]
+    message: "Use a space after `{` and before `}`."
+    severity: warning
+
+  view_name_suffix:
+    name: "View Name Suffix"
+    included: "/app/views/"
+    regex: '^struct\s+\w+(?<!View)\s*:'
+    message: "Screens in views/ end with `View` (e.g. `MovieFormView`)."
+    severity: warning
+
+  view_model_name_suffix:
+    name: "View Model Name Suffix"
+    included: "/app/view-models/"
+    regex: '^(?:final\s+)?class\s+\w+(?<!ViewModel)\s*[:{]'
+    message: "Types in view-models/ end with `ViewModel`."
+    severity: warning
+
+  utils_name_suffix:
+    name: "Utils Name Suffix"
+    included: "/app/utils/"
+    regex: '^(?:enum|struct|(?:final\s+)?class)\s+\w+(?<!Utils)\s*[:{]'
+    message: "Types in utils/ end with `Utils` (e.g. `StringUtils`)."
+    severity: warning
+
+  component_name_without_view_suffix:
+    name: "Component Name Without View Suffix"
+    included: "/app/components/"
+    regex: '^struct\s+\w+View\s*:'
+    message: "Components don't end with `View`; that suffix is for screens."
+    severity: warning
+
+  models_header_folder:
+    name: "Models Header Folder"
+    included: "/app/models/"
+    regex: '\A//\n//  (?!models/)'
+    message: "Files in models/ use `models/FileName.swift` in the header."
+    severity: warning
+
+  components_header_folder:
+    name: "Components Header Folder"
+    included: "/app/components/"
+    regex: '\A//\n//  (?!components/)'
+    message: "Files in components/ use `components/FileName.swift` in the header."
+    severity: warning
+
+  no_header_folder:
+    name: "No Header Folder"
+    excluded: "/app/(models|components)/"
+    regex: '\A//\n//  (?:components|models)/'
+    message: "Only models/ and components/ name their folder in the header."
+    severity: warning

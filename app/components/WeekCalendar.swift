@@ -1,5 +1,5 @@
 //
-//  WeekCalendarView.swift
+//  components/WeekCalendar.swift
 //  Pamela
 //
 //  Copyright © 2026 weltraa. All rights reserved.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct WeekCalendarView: View {
+struct WeekCalendar: View {
   @State private var viewModel = WeekCalendarViewModel()
   @Binding var selectedDate: Date
 
@@ -77,12 +77,13 @@ private struct DayCell: View {
       .contentShape(.rect)
     }
     .buttonStyle(.plain)
-    //.accessibilityElement(children: .combine)
-    //.accessibilityAddTraits(isSelected ? .isSelected : [])
+    // ToDo: review this block below.
+    // .accessibilityElement(children: .combine)
+    // .accessibilityAddTraits(isSelected ? .isSelected : [])
   }
 }
 
 #Preview {
   @Previewable @State var selectedDate = Date.now
-  WeekCalendarView(selectedDate: $selectedDate)
+  WeekCalendar(selectedDate: $selectedDate)
 }

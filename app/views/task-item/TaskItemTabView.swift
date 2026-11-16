@@ -25,7 +25,7 @@ struct TaskItemTabView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal)
 
-      WeekCalendarView(selectedDate: $selectedDate)
+      WeekCalendar(selectedDate: $selectedDate)
 
       if tasks.isEmpty {
         NoEntriesNotice(
@@ -69,7 +69,7 @@ struct TaskItemTabView: View {
       }
     }
     .sheet(item: $viewModel.taskToEdit) { task in
-      TaskItemFrequencyForm(task: task)
+      TaskItemFrequencyFormView(task: task)
     }
     .onReceive(
       NotificationCenter.default.publisher(

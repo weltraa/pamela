@@ -1,5 +1,5 @@
 //
-//  MovieForm.swift
+//  MovieFormView.swift
 //  Pamela
 //
 //  Copyright © 2026 weltraa. All rights reserved.
@@ -9,7 +9,7 @@
 import SwiftUI
 import SwiftData
 
-struct MovieForm: View {
+struct MovieFormView: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
   @Query private var movies: [Movie]
@@ -18,13 +18,6 @@ struct MovieForm: View {
 
   // The movie being edited, or `nil` when adding a new one.
   private let movie: Movie?
-
-  init(movie: Movie? = nil) {
-    self.movie = movie
-    _viewModel = State(
-      initialValue: movie.map { MovieFormViewModel(movie: $0) } ?? MovieFormViewModel()
-    )
-  }
 
   var body: some View {
     let isDuplicate = viewModel.isDuplicate(among: movies, excluding: movie)
@@ -43,9 +36,9 @@ struct MovieForm: View {
           }
         }
 
-        Section("Year"){
-          Picker("placeholder", selection: $viewModel.year){
-            ForEach(viewModel.selectableYears, id: \.self){ year in
+        Section("Year") {
+          Picker("placeholder", selection: $viewModel.year) {
+            ForEach(viewModel.selectableYears, id: \.self) { year in
               Text(String(year)).tag(year)
             }
           }
@@ -59,7 +52,9 @@ struct MovieForm: View {
         Section {
           Group {
             TextField("Director", text: $viewModel.firstDirector)
-            TextField("Second director (optional)", text: $viewModel.secondDirector)
+            TextField(
+              "Second director (optional)", text: $viewModel.secondDirector
+            )
           }
           .textInputAutocapitalization(.words)
           .autocorrectionDisabled()
@@ -83,12 +78,13 @@ struct MovieForm: View {
             dismiss()
           }
         }
-        
+
         ToolbarItem(placement: .confirmationAction) {
           Button(movie == nil ? "Add" : "Save", role: .confirm) {
             if let movie {
               viewModel.apply(to: movie)
-            } else {
+            }
+            else {
               modelContext.insert(viewModel.makeMovie())
             }
             try? modelContext.save()
@@ -99,9 +95,19 @@ struct MovieForm: View {
       }
     }
   }
+
+  init(movie: Movie? = nil) {
+    self.movie = movie
+    _viewModel = State(
+      initialValue:
+        movie.map {
+          MovieFormViewModel(movie: $0)
+        } ?? MovieFormViewModel()
+    )
+  }
 }
 
 #Preview {
-  MovieForm()
+  MovieFormView()
     .modelContainer(for: Movie.self, inMemory: true)
 }

@@ -28,13 +28,40 @@ final class TaskItemFormViewModel {
   }
 
   private let allWeekdays: [TaskItem.Weekdays] = [
-      .sunday, .monday, .tuesday, .wednesday,
-      .thursday, .friday, .saturday
+    .sunday, .monday, .tuesday, .wednesday,
+    .thursday, .friday, .saturday
   ]
 
   var title: String = ""
   var frequency: Frequency = .none
   var selectedWeekdays: TaskItem.Weekdays = []
+
+  // The chosen frequency as `TaskItem` stores it, or `nil` while it is
+  // incomplete (weekly with no days picked yet).
+  var taskFrequency: TaskItem.Frequency? {
+    switch frequency {
+      case .none:   TaskItem.Frequency.none
+      case .daily:  TaskItem.Frequency.daily
+      case .weekly:
+        selectedWeekdays.isEmpty
+          ? nil
+          : TaskItem.Frequency.weekly(selectedWeekdays)
+    }
+  }
+
+  // Weekday indices (0 = Sunday) in the order the user's calendar starts
+  // the week, so they line up with the week calendar.
+  var orderedWeekdays: [Int] {
+    let firstIndex = Calendar.current.firstWeekday - 1
+    return (0..<7).map { (firstIndex + $0) % 7 }
+  }
+
+  var canSave: Bool {
+    guard !StringUtils.trimmedTitle(for: title).isEmpty
+    else { return false }
+
+    return frequency != .weekly || !selectedWeekdays.isEmpty
+  }
 
   init() {}
 
@@ -47,26 +74,6 @@ final class TaskItemFormViewModel {
         frequency = .weekly
         selectedWeekdays = days
     }
-  }
-
-  /// The chosen frequency as `TaskItem` stores it, or `nil` while it is
-  /// incomplete (weekly with no days picked yet).
-  var taskFrequency: TaskItem.Frequency? {
-    switch frequency {
-      case .none:   TaskItem.Frequency.none
-      case .daily:  TaskItem.Frequency.daily
-      case .weekly:
-        selectedWeekdays.isEmpty
-          ? nil
-          : TaskItem.Frequency.weekly(selectedWeekdays)
-    }
-  }
-
-  /// Weekday indices (0 = Sunday) in the order the user's calendar starts
-  /// the week, so they line up with the week calendar.
-  var orderedWeekdays: [Int] {
-    let firstIndex = Calendar.current.firstWeekday - 1
-    return (0..<7).map { (firstIndex + $0) % 7 }
   }
 
   func weekdayName(forWeekdayNum weekday: Int) -> String {
@@ -96,17 +103,6 @@ final class TaskItemFormViewModel {
     }
   }
 
-  private var trimmedTitle: String {
-    title.trimmingCharacters(in: .whitespacesAndNewlines)
-  }
-
-  var canSave: Bool {
-    guard !trimmedTitle.isEmpty
-    else { return false }
-
-    return frequency != .weekly || !selectedWeekdays.isEmpty
-  }
-
   func makeTask() -> TaskItem {
     let taskFrequency: TaskItem.Frequency = switch frequency {
       case .none:   .none
@@ -115,7 +111,9 @@ final class TaskItemFormViewModel {
     }
 
     return TaskItem(
-      title: trimmedTitle, frequency: taskFrequency, isCompleted: false
+      title: StringUtils.trimmedTitle(for: title),
+      frequency: taskFrequency,
+      isCompleted: false
     )
   }
 }

@@ -1,5 +1,5 @@
 //
-//  SobrietyForm.swift
+//  BookFormView.swift
 //  Pamela
 //
 //  Copyright © 2026 weltraa. All rights reserved.
@@ -8,9 +8,9 @@
 
 import SwiftUI
 
-struct SobrietyForm: View {
+struct BookFormView: View {
 
   var body: some View {
-    Text("Sobriety form")
+    Text("Books form")
   }
 }

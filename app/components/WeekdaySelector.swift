@@ -1,5 +1,5 @@
 //
-//  WeekdaySelector.swift
+//  components/WeekdaySelector.swift
 //  Pamela
 //
 //  Copyright © 2026 weltraa. All rights reserved.

@@ -31,7 +31,8 @@ final class TaskItemTabViewModel {
   func setExpanded(_ isExpanded: Bool, for section: String) {
     if isExpanded {
       collapsedSections.remove(section)
-    } else {
+    }
+    else {
       collapsedSections.insert(section)
     }
   }

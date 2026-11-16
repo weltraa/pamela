@@ -12,13 +12,8 @@ import Observation
 @Observable
 final class WeekCalendarViewModel {
   let calendar: Calendar
+
   var todayDate: Date
-
-  init(calendar: Calendar = .current, todayDate: Date = .now) {
-    self.calendar = calendar
-    self.todayDate = todayDate
-  }
-
   var days: [Date] {
     guard
       let interval: DateInterval = calendar.dateInterval(
@@ -31,6 +26,11 @@ final class WeekCalendarViewModel {
         byAdding: .day, value: dayIndex, to: interval.start
       )
     }
+  }
+
+  init(calendar: Calendar = .current, todayDate: Date = .now) {
+    self.calendar = calendar
+    self.todayDate = todayDate
   }
 
   func weekdayNumStr(for date: Date) -> String {
