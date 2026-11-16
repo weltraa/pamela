@@ -15,6 +15,8 @@ struct PamelaApp: App {
     WindowGroup {
       RootView()
     }
-    .modelContainer(for: [TaskItem.self, Book.self, Movie.self])
+    .modelContainer(
+      for: [TaskItem.self, Book.self, Movie.self, Addiction.self]
+    )
   }
 }

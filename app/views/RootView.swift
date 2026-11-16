@@ -46,7 +46,6 @@ struct RootView: View {
           Button("Add", systemImage: "plus.circle") {
             showAddSheet = true
           }
-          .disabled(!viewModel.canAdd())
         }
       }
       .sheet(isPresented: $showAddSheet) {
@@ -54,7 +53,7 @@ struct RootView: View {
           case .tasks: TaskItemFormView()
           case .books: BookFormView()
           case .movies: MovieFormView()
-          default: EmptyView()
+          case .sobriety: SobrietyFormView()
         }
       }
     }
@@ -64,7 +63,7 @@ struct RootView: View {
 #Preview {
   RootView()
     .modelContainer(
-      for: [TaskItem.self, Book.self, Movie.self],
+      for: [TaskItem.self, Book.self, Movie.self, Addiction.self],
       inMemory: true
     )
 }
