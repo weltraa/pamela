@@ -12,7 +12,7 @@ import SwiftData
 @Model
 final class Addiction {
   // Units of the time sober, largest first.
-  private static let units: [Calendar.Component] = [
+  static let units: [Calendar.Component] = [
     .year, .month, .day, .hour, .minute, .second
   ]
 

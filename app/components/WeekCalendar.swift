@@ -39,10 +39,12 @@ struct WeekCalendar: View {
 }
 
 private struct DayCell: View {
+  @Environment(\.palette) private var palette
+
   private var dayNumColor: Color {
     if isSelected { return .white }
 
-    return isToday ? .accentColor : .primary
+    return isToday ? palette.accent : .primary
   }
 
   let weekday: String
@@ -58,7 +60,7 @@ private struct DayCell: View {
           .font(.caption)
           .fontWeight(.medium)
           .textCase(.uppercase)
-          .foregroundStyle(isToday ? Color.accentColor : Color.secondary)
+          .foregroundStyle(isToday ? palette.accent : Color.secondary)
 
         Text(weekdayNumStr)
           .font(.title3)
@@ -68,7 +70,7 @@ private struct DayCell: View {
           .frame(width: 40, height: 40)
           .background {
             if isSelected {
-              Circle().fill(.tint)
+              Circle().fill(palette.accent)
             }
           }
       }

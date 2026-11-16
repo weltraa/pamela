@@ -9,6 +9,8 @@
 import SwiftUI
 
 struct WeekdaySelector: View {
+  @Environment(\.palette) private var palette
+
   let viewModel: TaskItemFormViewModel
 
   var body: some View {
@@ -25,9 +27,7 @@ struct WeekdaySelector: View {
             .foregroundStyle(isSelected ? Color.white : Color.primary)
             .frame(width: 36, height: 36)
             .background {
-              Circle().fill(
-                isSelected ? Color.accentColor : Color(.tertiarySystemFill)
-              )
+              Circle().fill(isSelected ? palette.accent : palette.fill)
             }
         }
         .buttonStyle(.plain)

@@ -51,7 +51,7 @@ struct SobrietyTabView: View {
           .padding(.vertical, 8)
         }
         // Same backdrop as the lists in the other tabs.
-        .background(Color(.systemGroupedBackground))
+        .background { Backdrop() }
       }
     }
     .sheet(item: $addictionToEdit) { addiction in
@@ -63,6 +63,8 @@ struct SobrietyTabView: View {
 // MARK: - Subviews
 
 private struct AddictionCard: View {
+  @Environment(\.palette) private var palette
+
   let addiction: Addiction
   let isFront: Bool
   let onSelect: () -> Void
@@ -105,8 +107,12 @@ private struct AddictionCard: View {
     }
     .padding(20)
     .background(
-      Color(.secondarySystemGroupedBackground), in: .rect(cornerRadius: 20)
+      palette.surface, in: .rect(cornerRadius: palette.cornerRadius)
     )
+    .overlay {
+      RoundedRectangle(cornerRadius: palette.cornerRadius)
+        .strokeBorder(palette.border ?? .clear)
+    }
     .shadow(color: .black.opacity(0.1), radius: 6, y: 2)
     .contentShape(.rect)
     .onTapGesture(perform: onSelect)
@@ -116,26 +122,33 @@ private struct AddictionCard: View {
 }
 
 private struct ElapsedTile: View {
+  @Environment(\.palette) private var palette
+
   let unit: Calendar.Component
   let value: Int
 
-  // Cool colors around the app's blue accent, from purple (years) to mint
-  // (seconds), so the tiles read as one gradient.
-  private var style: (name: String, color: Color) {
+  private var unitName: String {
     switch unit {
-      case .year:   ("year", .purple)
-      case .month:  ("month", .indigo)
-      case .day:    ("day", .blue)
-      case .hour:   ("hour", .cyan)
-      case .minute: ("minute", .teal)
-      default:      ("second", .mint)
+      case .year:   "year"
+      case .month:  "month"
+      case .day:    "day"
+      case .hour:   "hour"
+      case .minute: "minute"
+      default:      "second"
     }
+  }
+
+  // Each unit keeps its own spot in the palette's spectrum, years first,
+  // so the tiles read as one gradient.
+  private var color: Color {
+    let index = Addiction.units.firstIndex(of: unit) ?? 0
+    return palette.spectrum[index % palette.spectrum.count]
   }
 
   var body: some View {
     HStack(alignment: .firstTextBaseline, spacing: 8) {
       Text(value, format: .number).bold()
-      Text(value == 1 ? style.name : "\(style.name)s")
+      Text(value == 1 ? unitName : "\(unitName)s")
     }
     .font(.largeTitle.italic())
     .frame(maxWidth: .infinity, alignment: .leading)
@@ -143,11 +156,23 @@ private struct ElapsedTile: View {
     .padding(.vertical, 8)
     .background {
       TileShape()
-        .fill(Color(.tertiarySystemFill))
+        .fill(palette.fill)
         .overlay {
           AccentShape()
-            .fill(style.color)
+            .fill(color)
             .clipShape(TileShape())
+        }
+        .overlay {
+          // A sheen over the top half, and an edge, where the theme has them.
+          TileShape()
+            .fill(
+              LinearGradient(
+                colors: [.white.opacity(palette.gloss), .white.opacity(0)],
+                startPoint: .top,
+                endPoint: .center
+              )
+            )
+          TileShape().stroke(palette.border ?? .clear)
         }
     }
   }

@@ -12,6 +12,7 @@ import SwiftUI
 struct BookFormView: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
+  @Environment(\.palette) private var palette
   @Query private var books: [Book]
 
   @State private var viewModel: BookFormViewModel
@@ -33,7 +34,7 @@ struct BookFormView: View {
         } footer: {
           if isDuplicate {
             Text("This book is already in your list.")
-              .foregroundStyle(.red)
+              .foregroundStyle(palette.destructive)
           }
         }
 

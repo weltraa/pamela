@@ -12,6 +12,7 @@ import SwiftUI
 struct SobrietyFormView: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
+  @Environment(\.palette) private var palette
   @Query private var addictions: [Addiction]
 
   @State private var viewModel: SobrietyFormViewModel
@@ -35,7 +36,7 @@ struct SobrietyFormView: View {
         } footer: {
           if isDuplicate {
             Text("You're already tracking this one.")
-              .foregroundStyle(.red)
+              .foregroundStyle(palette.destructive)
           }
           else if viewModel.canSave {
             Text("Shown as: \(viewModel.headline)…")

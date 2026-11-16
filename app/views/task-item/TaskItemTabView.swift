@@ -118,6 +118,7 @@ private struct TaskItemSection: View {
 
 private struct TaskItemRow: View {
   @Environment(\.modelContext) private var modelContext
+  @Environment(\.palette) private var palette
 
   let task: TaskItem
   let day: Date
@@ -166,7 +167,7 @@ private struct TaskItemRow: View {
             systemImage: isDone ? "arrow.uturn.backward" : "checkmark"
           )
         }
-        .tint(.green)
+        .tint(palette.success)
       }
     }
     .swipeActions(edge: .trailing) {
@@ -185,7 +186,7 @@ private struct TaskItemRow: View {
       } label: {
         Label("Repeat", systemImage: "repeat")
       }
-      .tint(.indigo)
+      .tint(palette.secondaryAction)
     }
   }
 

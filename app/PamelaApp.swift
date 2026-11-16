@@ -14,6 +14,7 @@ struct PamelaApp: App {
   var body: some Scene {
     WindowGroup {
       RootView()
+        .appTheme()
     }
     .modelContainer(
       for: [TaskItem.self, Book.self, Movie.self, Addiction.self]

@@ -12,6 +12,7 @@ import SwiftData
 struct MovieFormView: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
+  @Environment(\.palette) private var palette
   @Query private var movies: [Movie]
 
   @State private var viewModel: MovieFormViewModel
@@ -32,7 +33,7 @@ struct MovieFormView: View {
         } footer: {
           if isDuplicate {
             Text("This movie is already in your list.")
-              .foregroundStyle(.red)
+              .foregroundStyle(palette.destructive)
           }
         }
 
