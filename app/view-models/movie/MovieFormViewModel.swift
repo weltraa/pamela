@@ -33,13 +33,7 @@ final class MovieFormViewModel {
   // Empty fields are skipped, and the same name typed twice (even with
   // different case or accents) counts once.
   var directors: [String] {
-    var seenKeys = Set<String>()
-
-    return [firstDirector, secondDirector]
-      .map(StringUtils.trimmedTitle(for:))
-      .filter {
-        !$0.isEmpty && seenKeys.insert(StringUtils.matchKey(for: $0)).inserted
-      }
+    StringUtils.uniqueNames([firstDirector, secondDirector])
   }
 
   // "et al." is only available once both directors are filled in.
@@ -49,9 +43,9 @@ final class MovieFormViewModel {
 
   // How the directors read, e.g. "David Fincher, Mel Gibson et al.".
   var directorsCredit: String {
-    Movie.credit(
+    StringUtils.credit(
       for: directors,
-      hasMoreDirectors: hasMoreDirectors && canMarkMoreDirectors
+      hasMore: hasMoreDirectors && canMarkMoreDirectors
     )
   }
 

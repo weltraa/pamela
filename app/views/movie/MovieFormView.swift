@@ -37,38 +37,21 @@ struct MovieFormView: View {
         }
 
         Section("Year") {
-          Picker("placeholder", selection: $viewModel.year) {
-            ForEach(viewModel.selectableYears, id: \.self) { year in
-              Text(String(year)).tag(year)
-            }
-          }
-          .pickerStyle(.wheel)
-          .labelsHidden()
-          .frame(height: 170)
-          .frame(height: 110, alignment: .top)
-          .clipped()
+          YearPicker(
+            selection: $viewModel.year,
+            years: viewModel.selectableYears
+          )
         }
 
-        Section {
-          Group {
-            TextField("Director", text: $viewModel.firstDirector)
-            TextField(
-              "Second director (optional)", text: $viewModel.secondDirector
-            )
-          }
-          .textInputAutocapitalization(.words)
-          .autocorrectionDisabled()
-
-          if viewModel.canMarkMoreDirectors {
-            Toggle("More than two directors", isOn: $viewModel.hasMoreDirectors)
-          }
-        } header: {
-          Text("Directors")
-        } footer: {
-          if !viewModel.directorsCredit.isEmpty {
-            Text("Shown as: \(viewModel.directorsCredit)")
-          }
-        }
+        CreditSection(
+          title: "Directors",
+          role: "Director",
+          first: $viewModel.firstDirector,
+          second: $viewModel.secondDirector,
+          hasMore: $viewModel.hasMoreDirectors,
+          canMarkMore: viewModel.canMarkMoreDirectors,
+          credit: viewModel.directorsCredit
+        )
       }
       .navigationTitle(movie == nil ? "New Movie Entry" : "Edit Movie")
       .navigationBarTitleDisplayMode(.inline)

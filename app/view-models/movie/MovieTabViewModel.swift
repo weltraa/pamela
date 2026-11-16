@@ -32,11 +32,7 @@ final class MovieTabViewModel {
   // Every recorded director once, alphabetically. Names that only differ
   // in case or accents ("Alfonso Cuarón" / "alfonso cuaron") count as one.
   func directors(in movies: [Movie]) -> [String] {
-    var seenKeys = Set<String>()
-
-    return movies
-      .flatMap(\.directors)
-      .filter { seenKeys.insert(StringUtils.matchKey(for: $0)).inserted }
+    StringUtils.uniqueNames(movies.flatMap(\.directors))
       .sorted { $0.localizedStandardCompare($1) == .orderedAscending }
   }
 

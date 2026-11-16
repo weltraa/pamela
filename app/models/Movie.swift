@@ -18,7 +18,7 @@ final class Movie {
   var directors: [String]
   var hasMoreDirectors: Bool
   var directorsCredit: String {
-    Self.credit(for: directors, hasMoreDirectors: hasMoreDirectors)
+    StringUtils.credit(for: directors, hasMore: hasMoreDirectors)
   }
 
   init(
@@ -31,12 +31,5 @@ final class Movie {
     self.year = year
     self.directors = Array(directors.prefix(Self.maxDirectors))
     self.hasMoreDirectors = hasMoreDirectors
-  }
-
-  static func credit(
-    for directors: [String], hasMoreDirectors: Bool
-  ) -> String {
-    let names = directors.joined(separator: ", ")
-    return hasMoreDirectors ? "\(names) et al." : names
   }
 }
