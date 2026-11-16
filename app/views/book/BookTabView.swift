@@ -36,7 +36,7 @@ struct BookTabView: View {
       else {
         List {
           ForEach(books) { book in
-            BookRow(book: book) {
+            BookRow(book: book, isExpanded: viewModel.isExpanded(book)) {
               withAnimation { viewModel.toggleChapters(of: book) }
             } onEdit: {
               bookToEdit = book
@@ -69,6 +69,7 @@ struct BookTabView: View {
 
 private struct BookRow: View {
   let book: Book
+  let isExpanded: Bool
   let onTap: () -> Void
   let onEdit: () -> Void
 
@@ -76,6 +77,14 @@ private struct BookRow: View {
     HStack {
       Button(action: onTap) {
         HStack {
+          Image(systemName: "chevron.right")
+            .font(.footnote.bold())
+            .foregroundStyle(.secondary)
+            .rotationEffect(.degrees(isExpanded ? 90 : 0))
+            // Hidden, not removed, so titles stay aligned across rows.
+            .opacity(book.chapters.isEmpty ? 0 : 1)
+            .accessibilityHidden(true)
+
           VStack(alignment: .leading) {
             Text("\(book.title) (\(String(book.year)))").bold()
             Text("by \(book.authorsCredit)")
