@@ -1,0 +1,10 @@
+// Build settings every copy of the project needs.
+//
+// To sign the app with your own Apple Developer team, create a
+// Developer.xcconfig next to this file (git ignores it) with:
+//
+//   DEVELOPMENT_TEAM = YOURTEAMID
+//
+// Without it, Xcode signs with the team of the account you're signed in
+// with: "#include?" skips the file when it isn't there.
+#include? "Developer.xcconfig"

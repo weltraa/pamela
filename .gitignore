@@ -25,5 +25,5 @@ DerivedData/
 .vscode/
 .idea/
 
-# Local build settings (see Local.xcconfig.example)
-Local.xcconfig
+# Personal signing settings (see Developer.xcconfig.example)
+Developer.xcconfig

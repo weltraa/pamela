@@ -1,6 +1,0 @@
-// Local build settings, kept out of git.
-// Copy this file to Local.xcconfig and fill in your own values.
-
-// Your Apple Developer team, from Xcode > Settings > Accounts.
-// Leave it empty to let Xcode pick the team of the signed-in account.
-DEVELOPMENT_TEAM =

@@ -1,0 +1,5 @@
+// Your own signing settings, kept out of git.
+// Copy this file to Developer.xcconfig and fill in your own values.
+
+// Your Apple Developer team, from Xcode > Settings > Accounts.
+DEVELOPMENT_TEAM =
