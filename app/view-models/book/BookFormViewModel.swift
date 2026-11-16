@@ -13,12 +13,9 @@ import Observation
 final class BookFormViewModel {
   // Around when Gutenberg's press started printing books.
   private static let minSelectableYear: UInt16 = 1450
-  private static let currYear: UInt16 = UInt16(
-    Calendar.current.component(.year, from: .now)
-  )
 
   var title: String = ""
-  var year: UInt16 = BookFormViewModel.currYear
+  var year: UInt16 = YearPicker.currentYear
   var firstAuthor: String = ""
   var secondAuthor: String = ""
   var hasMoreAuthors: Bool = false
@@ -28,7 +25,7 @@ final class BookFormViewModel {
   var newChapterTitle: String = ""
 
   var selectableYears: ClosedRange<UInt16> {
-    Self.minSelectableYear...Self.currYear
+    Self.minSelectableYear...YearPicker.currentYear
   }
 
   var authors: [String] {

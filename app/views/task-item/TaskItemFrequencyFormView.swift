@@ -74,5 +74,6 @@ struct TaskItemFrequencyFormView: View {
   let _ = container.mainContext.insert(task)
 
   TaskItemFrequencyFormView(task: task)
+    .appTheme()
     .modelContainer(container)
 }

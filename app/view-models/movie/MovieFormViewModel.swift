@@ -11,13 +11,11 @@ import Observation
 
 @Observable
 final class MovieFormViewModel {
+  // Roughly when the first films were shot.
   private static let minSelectableYear: UInt16 = 1888
-  private static let currYear: UInt16 = UInt16(
-    Calendar.current.component(.year, from: .now)
-  )
 
   var name: String = ""
-  var year: UInt16 = UInt16(Calendar.current.component(.year, from: .now))
+  var year: UInt16 = YearPicker.currentYear
   var firstDirector: String = ""
   var secondDirector: String = ""
 
@@ -26,7 +24,7 @@ final class MovieFormViewModel {
   var hasMoreDirectors: Bool = false
 
   var selectableYears: ClosedRange<UInt16> {
-    Self.minSelectableYear...Self.currYear
+    Self.minSelectableYear...YearPicker.currentYear
   }
 
   // The filled-in director names, in order.

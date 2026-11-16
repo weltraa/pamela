@@ -212,5 +212,6 @@ private struct TaskItemRow: View {
 
 #Preview {
   TaskItemTabView()
+    .appTheme()
     .modelContainer(for: TaskItem.self, inMemory: true)
 }

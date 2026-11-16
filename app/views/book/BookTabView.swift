@@ -140,5 +140,6 @@ private struct ChapterRow: View {
 
 #Preview {
   BookTabView()
+    .appTheme()
     .modelContainer(for: Book.self, inMemory: true)
 }

@@ -6,13 +6,12 @@
 //  Licensed under the PolyForm Strict License 1.0.0. See LICENSE.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct MovieFormView: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
-  @Environment(\.palette) private var palette
   @Query private var movies: [Movie]
 
   @State private var viewModel: MovieFormViewModel
@@ -32,8 +31,7 @@ struct MovieFormView: View {
           Text("Title")
         } footer: {
           if isDuplicate {
-            Text("This movie is already in your list.")
-              .foregroundStyle(palette.destructive)
+            DuplicateNotice(message: "This movie is already in your list.")
           }
         }
 
@@ -56,26 +54,20 @@ struct MovieFormView: View {
       }
       .navigationTitle(movie == nil ? "New Movie Entry" : "Edit Movie")
       .navigationBarTitleDisplayMode(.inline)
-      .toolbar {
-        ToolbarItem(placement: .cancellationAction) {
-          Button("Cancel", role: .cancel) {
-            dismiss()
-          }
+      .formToolbar(
+        isEditing: movie != nil,
+        canSave: viewModel.canSave && !isDuplicate
+      ) {
+        dismiss()
+      } onConfirm: {
+        if let movie {
+          viewModel.apply(to: movie)
         }
-
-        ToolbarItem(placement: .confirmationAction) {
-          Button(movie == nil ? "Add" : "Save", role: .confirm) {
-            if let movie {
-              viewModel.apply(to: movie)
-            }
-            else {
-              modelContext.insert(viewModel.makeMovie())
-            }
-            try? modelContext.save()
-            dismiss()
-          }
-          .disabled(!viewModel.canSave || isDuplicate)
+        else {
+          modelContext.insert(viewModel.makeMovie())
         }
+        try? modelContext.save()
+        dismiss()
       }
     }
   }
@@ -93,5 +85,6 @@ struct MovieFormView: View {
 
 #Preview {
   MovieFormView()
+    .appTheme()
     .modelContainer(for: Movie.self, inMemory: true)
 }

@@ -222,5 +222,6 @@ private struct AccentShape: Shape {
 
 #Preview {
   SobrietyTabView()
+    .appTheme()
     .modelContainer(for: Addiction.self, inMemory: true)
 }

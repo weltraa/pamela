@@ -277,7 +277,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = "0.5.0-alpha";
+				MARKETING_VERSION = "0.1.0-beta";
 				PRODUCT_BUNDLE_IDENTIFIER = com.weltraa.Pamela;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -310,7 +310,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = "0.5.0-alpha";
+				MARKETING_VERSION = "0.1.0-beta";
 				PRODUCT_BUNDLE_IDENTIFIER = com.weltraa.Pamela;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;

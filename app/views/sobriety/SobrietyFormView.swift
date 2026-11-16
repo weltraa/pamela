@@ -12,7 +12,6 @@ import SwiftUI
 struct SobrietyFormView: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
-  @Environment(\.palette) private var palette
   @Query private var addictions: [Addiction]
 
   @State private var viewModel: SobrietyFormViewModel
@@ -35,8 +34,7 @@ struct SobrietyFormView: View {
           Text("Addiction")
         } footer: {
           if isDuplicate {
-            Text("You're already tracking this one.")
-              .foregroundStyle(palette.destructive)
+            DuplicateNotice(message: "You're already tracking this one.")
           }
           else if viewModel.canSave {
             Text("Shown as: \(viewModel.headline)…")
@@ -62,26 +60,20 @@ struct SobrietyFormView: View {
       }
       .navigationTitle(addiction == nil ? "New Addiction" : "Edit Addiction")
       .navigationBarTitleDisplayMode(.inline)
-      .toolbar {
-        ToolbarItem(placement: .cancellationAction) {
-          Button("Cancel", role: .cancel) {
-            dismiss()
-          }
+      .formToolbar(
+        isEditing: addiction != nil,
+        canSave: viewModel.canSave && !isDuplicate
+      ) {
+        dismiss()
+      } onConfirm: {
+        if let addiction {
+          viewModel.apply(to: addiction)
         }
-
-        ToolbarItem(placement: .confirmationAction) {
-          Button(addiction == nil ? "Add" : "Save", role: .confirm) {
-            if let addiction {
-              viewModel.apply(to: addiction)
-            }
-            else {
-              modelContext.insert(viewModel.makeAddiction())
-            }
-            try? modelContext.save()
-            dismiss()
-          }
-          .disabled(!viewModel.canSave || isDuplicate)
+        else {
+          modelContext.insert(viewModel.makeAddiction())
         }
+        try? modelContext.save()
+        dismiss()
       }
       .confirmationDialog(
         "Delete this addiction?",
@@ -114,5 +106,6 @@ struct SobrietyFormView: View {
 
 #Preview {
   SobrietyFormView()
+    .appTheme()
     .modelContainer(for: Addiction.self, inMemory: true)
 }

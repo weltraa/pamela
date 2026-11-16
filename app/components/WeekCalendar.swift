@@ -79,13 +79,13 @@ private struct DayCell: View {
       .contentShape(.rect)
     }
     .buttonStyle(.plain)
-    // ToDo: review this block below.
-    // .accessibilityElement(children: .combine)
-    // .accessibilityAddTraits(isSelected ? .isSelected : [])
+    .accessibilityElement(children: .combine)
+    .accessibilityAddTraits(isSelected ? .isSelected : [])
   }
 }
 
 #Preview {
   @Previewable @State var selectedDate = Date.now
   WeekCalendar(selectedDate: $selectedDate)
+    .appTheme()
 }

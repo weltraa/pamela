@@ -11,7 +11,8 @@ import SwiftData
 
 @Model
 final class Addiction {
-  // Units of the time sober, largest first.
+  // Units of the time sober, largest first. The tiles color themselves by
+  // a unit's place in this list.
   static let units: [Calendar.Component] = [
     .year, .month, .day, .hour, .minute, .second
   ]

@@ -6,12 +6,12 @@
 //  Licensed under the PolyForm Strict License 1.0.0. See LICENSE.
 //
 
-import Observation
 import Foundation
+import Observation
 
 @Observable
 final class RootViewModel {
-  public enum RootTab: CaseIterable, Identifiable {
+  enum RootTab: CaseIterable, Identifiable {
     case tasks
     case books
     case movies

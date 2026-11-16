@@ -12,7 +12,6 @@ import SwiftUI
 struct BookFormView: View {
   @Environment(\.dismiss) private var dismiss
   @Environment(\.modelContext) private var modelContext
-  @Environment(\.palette) private var palette
   @Query private var books: [Book]
 
   @State private var viewModel: BookFormViewModel
@@ -33,8 +32,7 @@ struct BookFormView: View {
           Text("Title")
         } footer: {
           if isDuplicate {
-            Text("This book is already in your list.")
-              .foregroundStyle(palette.destructive)
+            DuplicateNotice(message: "This book is already in your list.")
           }
         }
 
@@ -73,26 +71,20 @@ struct BookFormView: View {
       }
       .navigationTitle(book == nil ? "New Book" : "Edit Book")
       .navigationBarTitleDisplayMode(.inline)
-      .toolbar {
-        ToolbarItem(placement: .cancellationAction) {
-          Button("Cancel", role: .cancel) {
-            dismiss()
-          }
+      .formToolbar(
+        isEditing: book != nil,
+        canSave: viewModel.canSave && !isDuplicate
+      ) {
+        dismiss()
+      } onConfirm: {
+        if let book {
+          viewModel.apply(to: book)
         }
-
-        ToolbarItem(placement: .confirmationAction) {
-          Button(book == nil ? "Add" : "Save", role: .confirm) {
-            if let book {
-              viewModel.apply(to: book)
-            }
-            else {
-              modelContext.insert(viewModel.makeBook())
-            }
-            try? modelContext.save()
-            dismiss()
-          }
-          .disabled(!viewModel.canSave || isDuplicate)
+        else {
+          modelContext.insert(viewModel.makeBook())
         }
+        try? modelContext.save()
+        dismiss()
       }
     }
   }
@@ -110,5 +102,6 @@ struct BookFormView: View {
 
 #Preview {
   BookFormView()
+    .appTheme()
     .modelContainer(for: Book.self, inMemory: true)
 }

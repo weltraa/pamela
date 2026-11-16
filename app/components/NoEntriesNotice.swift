@@ -26,4 +26,5 @@ struct NoEntriesNotice: View {
     title: "No tasks yet",
     description: "Tap + to add your first task."
   )
+    .appTheme()
 }

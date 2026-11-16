@@ -139,5 +139,6 @@ private struct MovieFilterMenu: View {
 
 #Preview {
   MovieTabView()
+    .appTheme()
     .modelContainer(for: Movie.self, inMemory: true)
 }

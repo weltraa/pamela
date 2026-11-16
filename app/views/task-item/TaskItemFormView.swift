@@ -18,7 +18,7 @@ struct TaskItemFormView: View {
   var body: some View {
     NavigationStack {
       Form {
-        Section ("Title") {
+        Section("Title") {
           TextField("Type here...", text: $viewModel.title)
         }
 
@@ -36,21 +36,12 @@ struct TaskItemFormView: View {
       }
       .navigationTitle("New Task")
       .navigationBarTitleDisplayMode(.inline)
-      .toolbar {
-        ToolbarItem(placement: .cancellationAction) {
-          Button("Cancel", role: .cancel) {
-            dismiss()
-          }
-        }
-
-        ToolbarItem(placement: .confirmationAction) {
-          Button("Add", role: .confirm) {
-            modelContext.insert(viewModel.makeTask())
-            try? modelContext.save()
-            dismiss()
-          }
-          .disabled(!viewModel.canSave)
-        }
+      .formToolbar(isEditing: false, canSave: viewModel.canSave) {
+        dismiss()
+      } onConfirm: {
+        modelContext.insert(viewModel.makeTask())
+        try? modelContext.save()
+        dismiss()
       }
     }
   }
@@ -58,5 +49,6 @@ struct TaskItemFormView: View {
 
 #Preview {
   TaskItemFormView()
+    .appTheme()
     .modelContainer(for: TaskItem.self, inMemory: true)
 }

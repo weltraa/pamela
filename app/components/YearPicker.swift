@@ -10,6 +10,9 @@ import SwiftUI
 
 // Wheel picker for a year, trimmed to a compact height.
 struct YearPicker: View {
+  // The year the app is being used in, the newest any entry can be.
+  static let currentYear = UInt16(Calendar.current.component(.year, from: .now))
+
   @Binding var selection: UInt16
   let years: ClosedRange<UInt16>
 
