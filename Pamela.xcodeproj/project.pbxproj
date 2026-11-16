@@ -8,6 +8,7 @@
 
 /* Begin PBXFileReference section */
 		C84F861130A01906001134EB /* Pamela.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pamela.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C8AA000130B0000000000001 /* Local.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Local.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -34,6 +35,7 @@
 			children = (
 				C84F861330A01906001134EB /* app */,
 				C84F861230A01906001134EB /* Products */,
+				C8AA000130B0000000000001 /* Local.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -138,6 +140,7 @@
 /* Begin XCBuildConfiguration section */
 		C84F861C30A01907001134EB /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C8AA000130B0000000000001 /* Local.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -171,7 +174,6 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = M4GJQC6L9L;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -202,6 +204,7 @@
 		};
 		C84F861D30A01907001134EB /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C8AA000130B0000000000001 /* Local.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -235,7 +238,6 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = M4GJQC6L9L;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -259,12 +261,12 @@
 		};
 		C84F861F30A01907001134EB /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C8AA000130B0000000000001 /* Local.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = M4GJQC6L9L;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 weltraa. All rights reserved.";
@@ -292,12 +294,12 @@
 		};
 		C84F862030A01907001134EB /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C8AA000130B0000000000001 /* Local.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = M4GJQC6L9L;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 weltraa. All rights reserved.";
