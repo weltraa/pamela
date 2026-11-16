@@ -56,18 +56,7 @@ struct BookFormView: View {
 
         Section("Table of Contents") {
           ForEach($viewModel.chapters) { $chapter in
-            HStack {
-              Button(
-                chapter.isRead ? "Mark as unread" : "Mark as read",
-                systemImage: chapter.isRead ? "checkmark.circle.fill" : "circle"
-              ) {
-                chapter.isRead.toggle()
-              }
-              .labelStyle(.iconOnly)
-              .buttonStyle(.borderless)
-
-              TextField("Chapter title", text: $chapter.title)
-            }
+            TextField("Chapter title", text: $chapter.title)
           }
           .onDelete { viewModel.chapters.remove(atOffsets: $0) }
 

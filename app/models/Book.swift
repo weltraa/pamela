@@ -51,4 +51,11 @@ final class Book {
     self.year = year
     self.chapters = chapters
   }
+
+  func toggleRead(_ chapter: Chapter) {
+    guard let index = chapters.firstIndex(where: { $0.id == chapter.id })
+    else { return }
+
+    chapters[index].isRead.toggle()
+  }
 }
